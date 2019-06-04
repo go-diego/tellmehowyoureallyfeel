@@ -1,0 +1,59 @@
+.is-display-1 {
+    font-size: 6rem;
+    // font-weight: 300;
+    // line-height: 1.2;
+}
+
+.is-display-2 {
+    font-size: 5.5rem;
+    // font-weight: 300;
+    // line-height: 1.2;
+}
+
+.is-display-3 {
+    font-size: 4.5rem;
+    // font-weight: 300;
+    // line-height: 1.2;
+}
+
+.is-display-4 {
+    font-size: 3.5rem;
+    // font-weight: 300;
+    // line-height: 1.2;
+}
+
+.is-stretched-link::after {
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    z-index: 1;
+    pointer-events: auto;
+    content: "";
+    background-color: rgba(0, 0, 0, 0);
+}
+
+.is-justify-content-center {
+    justify-content: center !important;
+}
+
+.is-align-items-center {
+    align-items: center !important;
+}
+
+.is-text-justified {
+    text-align: justify !important;
+    text-justify: inter-word !important;
+}
+
+.is-object-fit-cover {
+    object-fit: cover !important;
+}
+
+@media screen and (max-width: 768px) {
+    .is-text-justified-mobile {
+        text-align: justify !important;
+        text-justify: inter-character !important;
+    }
+}

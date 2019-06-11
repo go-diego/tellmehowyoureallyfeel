@@ -1,20 +1,36 @@
+import React from "react";
 import Emoji from "react-emoji-render";
 import styled from "styled-components";
 import Layout from "../containers/Layout";
+import Airtable from "../api/airtable.api";
+
+const airtable = new Airtable();
 
 const QuestionContainer = styled.div`
     padding: 2.5rem 0;
 `;
 
-export default function HomePage() {
-    return (
-        <Layout>
-            <section className="hero is-bold is-primary is-fullheight">
-                <div className="hero-head">
-                    <header className="navbar">
-                        <div className="container">
-                            <div className="navbar-brand">
-                                {/* <a className="navbar-item">
+class HomePage extends React.Component {
+    async componentDidMount() {
+        const questionsRecords = await airtable.getActiveQuestion();
+        console.log("questionsRecords", questionsRecords);
+        const { records: questions } = questionsRecords;
+        if (questions) {
+            const answerTypeId = questions[0].fields.AnswerType[0];
+            const answerTypeRecord = await airtable.getAnswerType(answerTypeId);
+            console.log("answerType", answerTypeRecord);
+        }
+    }
+
+    render() {
+        return (
+            <Layout>
+                <section className="hero is-bold is-primary is-fullheight">
+                    <div className="hero-head">
+                        <header className="navbar">
+                            <div className="container">
+                                <div className="navbar-brand">
+                                    {/* <a className="navbar-item">
                                     <img
                                         style={{
                                             width: 200,
@@ -25,15 +41,15 @@ export default function HomePage() {
                                         alt="Logo"
                                     />
                                 </a> */}
-                                {/* <span
+                                    {/* <span
                                     className="navbar-burger burger"
                                     data-target="navbarMenuHeroC">
                                     <span />
                                     <span />
                                     <span />
                                 </span> */}
-                            </div>
-                            {/* <div id="navbarMenuHeroC" className="navbar-menu">
+                                </div>
+                                {/* <div id="navbarMenuHeroC" className="navbar-menu">
                                 <div className="navbar-end">
                                     <a className="navbar-item is-active">
                                         Home
@@ -50,55 +66,60 @@ export default function HomePage() {
                                     </span>
                                 </div>
                             </div> */}
-                        </div>
-                    </header>
-                </div>
+                            </div>
+                        </header>
+                    </div>
 
-                <div className="hero-body">
-                    <div className="container has-text-centered">
-                        <div>
-                            <img
-                                style={{
-                                    width: 300
-                                }}
-                                src="https://www.bgcofcv.org/assets/images/hero-logo.png"
-                                alt="Logo"
-                            />
-                            <QuestionContainer>
-                                <h1 className="title">How did we do today?</h1>
+                    <div className="hero-body">
+                        <div className="container has-text-centered">
+                            <div>
+                                <img
+                                    style={{
+                                        width: 300
+                                    }}
+                                    src="https://www.bgcofcv.org/assets/images/hero-logo.png"
+                                    alt="Logo"
+                                />
+                                <QuestionContainer>
+                                    <h1 className="title">
+                                        How did we do today?
+                                    </h1>
 
-                                <div className="buttons are-large is-flex is-justify-content-center">
-                                    <a className="button">
-                                        <span className="icon is-medium">
-                                            <Emoji text=":heart_eyes:" />
-                                        </span>
-                                    </a>
-                                    <a className="button">
-                                        <span className="icon is-medium">
-                                            <Emoji text=":smile:" />
-                                        </span>
-                                    </a>
-                                    <a className="button">
-                                        <span className="icon is-medium">
-                                            <Emoji text=":neutral_face:" />
-                                        </span>
-                                    </a>
-                                    <a className="button">
-                                        <span className="icon is-medium">
-                                            <Emoji text=":unamused:" />
-                                        </span>
-                                    </a>
-                                    <a className="button">
-                                        <span className="icon is-medium">
-                                            <Emoji text=":confounded:" />
-                                        </span>
-                                    </a>
-                                </div>
-                            </QuestionContainer>
+                                    <div className="buttons are-large is-flex is-justify-content-center">
+                                        <a className="button">
+                                            <span className="icon is-medium">
+                                                <Emoji text=":heart_eyes:" />
+                                            </span>
+                                        </a>
+                                        <a className="button">
+                                            <span className="icon is-medium">
+                                                <Emoji text=":smile:" />
+                                            </span>
+                                        </a>
+                                        <a className="button">
+                                            <span className="icon is-medium">
+                                                <Emoji text=":neutral_face:" />
+                                            </span>
+                                        </a>
+                                        <a className="button">
+                                            <span className="icon is-medium">
+                                                <Emoji text=":unamused:" />
+                                            </span>
+                                        </a>
+                                        <a className="button">
+                                            <span className="icon is-medium">
+                                                <Emoji text=":confounded:" />
+                                            </span>
+                                        </a>
+                                    </div>
+                                </QuestionContainer>
+                            </div>
                         </div>
                     </div>
-                </div>
-            </section>
-        </Layout>
-    );
+                </section>
+            </Layout>
+        );
+    }
 }
+
+export default HomePage;

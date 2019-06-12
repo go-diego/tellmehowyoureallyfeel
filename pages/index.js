@@ -1,7 +1,8 @@
 import React from "react";
-import Emoji from "react-emoji-render";
 import styled from "styled-components";
 import Layout from "../containers/Layout";
+import Rating from "../components/Rating";
+import Notification from "../components/Notification";
 import Airtable from "../api/airtable.api";
 
 const airtable = new Airtable();
@@ -11,65 +12,30 @@ const QuestionContainer = styled.div`
 `;
 
 class HomePage extends React.Component {
+    state = {
+        activeQuestion: null,
+        isNotificationOn: false
+    };
+
+    showNotification = () => {
+        this.setState({ isNotificationOn: true });
+    };
+
+    hideNotification = () => {
+        this.setState({ isNotificationOn: false });
+    };
+
     async componentDidMount() {
-        const questionsRecords = await airtable.getActiveQuestion();
-        console.log("questionsRecords", questionsRecords);
-        const { records: questions } = questionsRecords;
-        if (questions) {
-            const answerTypeId = questions[0].fields.AnswerType[0];
-            const answerTypeRecord = await airtable.getAnswerType(answerTypeId);
-            console.log("answerType", answerTypeRecord);
-        }
+        const questionRecord = await airtable.getActiveQuestion();
+        const question = questionRecord.records[0];
+        if (question) this.setState({ activeQuestion: question });
     }
 
     render() {
+        const { activeQuestion, isNotificationOn } = this.state;
         return (
             <Layout>
                 <section className="hero is-bold is-primary is-fullheight">
-                    <div className="hero-head">
-                        <header className="navbar">
-                            <div className="container">
-                                <div className="navbar-brand">
-                                    {/* <a className="navbar-item">
-                                    <img
-                                        style={{
-                                            width: 200,
-                                            height: "auto",
-                                            maxHeight: "auto"
-                                        }}
-                                        src="https://www.bgcofcv.org/assets/images/hero-logo.png"
-                                        alt="Logo"
-                                    />
-                                </a> */}
-                                    {/* <span
-                                    className="navbar-burger burger"
-                                    data-target="navbarMenuHeroC">
-                                    <span />
-                                    <span />
-                                    <span />
-                                </span> */}
-                                </div>
-                                {/* <div id="navbarMenuHeroC" className="navbar-menu">
-                                <div className="navbar-end">
-                                    <a className="navbar-item is-active">
-                                        Home
-                                    </a>
-                                    <a className="navbar-item">Examples</a>
-                                    <a className="navbar-item">Documentation</a>
-                                    <span className="navbar-item">
-                                        <a className="button is-success is-inverted">
-                                            <span className="icon">
-                                                <i className="fab fa-github" />
-                                            </span>
-                                            <span>Download</span>
-                                        </a>
-                                    </span>
-                                </div>
-                            </div> */}
-                            </div>
-                        </header>
-                    </div>
-
                     <div className="hero-body">
                         <div className="container has-text-centered">
                             <div>
@@ -80,39 +46,35 @@ class HomePage extends React.Component {
                                     src="https://www.bgcofcv.org/assets/images/hero-logo.png"
                                     alt="Logo"
                                 />
-                                <QuestionContainer>
-                                    <h1 className="title">
-                                        How did we do today?
-                                    </h1>
-
-                                    <div className="buttons are-large is-flex is-justify-content-center">
-                                        <a className="button">
-                                            <span className="icon is-medium">
-                                                <Emoji text=":heart_eyes:" />
-                                            </span>
-                                        </a>
-                                        <a className="button">
-                                            <span className="icon is-medium">
-                                                <Emoji text=":smile:" />
-                                            </span>
-                                        </a>
-                                        <a className="button">
-                                            <span className="icon is-medium">
-                                                <Emoji text=":neutral_face:" />
-                                            </span>
-                                        </a>
-                                        <a className="button">
-                                            <span className="icon is-medium">
-                                                <Emoji text=":unamused:" />
-                                            </span>
-                                        </a>
-                                        <a className="button">
-                                            <span className="icon is-medium">
-                                                <Emoji text=":confounded:" />
-                                            </span>
-                                        </a>
-                                    </div>
-                                </QuestionContainer>
+                                {(!isNotificationOn && (
+                                    <QuestionContainer>
+                                        {(() => {
+                                            if (activeQuestion) {
+                                                switch (
+                                                    activeQuestion.fields
+                                                        .QuestionType
+                                                ) {
+                                                    case "RATING":
+                                                        return (
+                                                            <Rating
+                                                                showNotification={
+                                                                    this
+                                                                        .showNotification
+                                                                }
+                                                                {...activeQuestion}
+                                                            />
+                                                        );
+                                                    default:
+                                                        return null;
+                                                }
+                                            }
+                                        })()}
+                                    </QuestionContainer>
+                                )) || (
+                                    <Notification
+                                        onClose={this.hideNotification}
+                                    />
+                                )}
                             </div>
                         </div>
                     </div>

@@ -4,7 +4,7 @@ export default function Airtable() {
     // TODO: create ky instance and define urlPreffix
     const baseUrl = "https://api.airtable.com/v0";
     const QUESTIONS_BASE = "appMCSWRv9HqlvajJ";
-    const ANSWERS_BASE = "appMCSWRv9HqlvajJ";
+    const SUBMISSIONS_BASE = "appQQw5CGO4GDUrzO";
     const baseOptions = {
         headers: { Authorization: `Bearer ${process.env.ATKEY}` }
     };
@@ -14,14 +14,18 @@ export default function Airtable() {
         return response;
     }
 
-    async function getAnswerType(answerTypeId) {
-        const url = `${baseUrl}/${ANSWERS_BASE}/Answers/${answerTypeId}`;
-        const response = await ky.get(url, baseOptions).json();
+    async function createSubmission(body) {
+        const url = `${baseUrl}/${SUBMISSIONS_BASE}/Submissions`;
+        const options = {
+            ...baseOptions,
+            json: body
+        };
+        const response = await ky.post(url, options).json();
         return response;
     }
 
     return Object.freeze({
         getActiveQuestion,
-        getAnswerType
+        createSubmission
     });
 }

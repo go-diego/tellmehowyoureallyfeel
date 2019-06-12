@@ -18,7 +18,7 @@ const StyledNotification = styled.div`
 
 const FEEDBACK_MESSAGES = [
     {
-        message: "Thank you Earthling. Your feedback has been received",
+        message: "Thank you, Earthlings. Your feedback has been received",
         emoji: ":alien:"
     },
     {

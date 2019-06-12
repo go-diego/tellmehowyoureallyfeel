@@ -1,19 +1,14 @@
 import React from "react";
-import styled from "styled-components";
 import Layout from "../containers/Layout";
-import Rating from "../components/Rating";
+import Question from "../components/Question";
 import Notification from "../components/Notification";
 import Airtable from "../api/airtable.api";
 
 const airtable = new Airtable();
 
-const QuestionContainer = styled.div`
-    padding: 2.5rem 0;
-`;
-
 class HomePage extends React.Component {
     state = {
-        activeQuestion: null,
+        question: null,
         isNotificationOn: false
     };
 
@@ -28,11 +23,11 @@ class HomePage extends React.Component {
     async componentDidMount() {
         const questionRecord = await airtable.getActiveQuestion();
         const question = questionRecord.records[0];
-        if (question) this.setState({ activeQuestion: question });
+        if (question) this.setState({ question });
     }
 
     render() {
-        const { activeQuestion, isNotificationOn } = this.state;
+        const { question, isNotificationOn } = this.state;
         return (
             <Layout>
                 <section className="hero is-bold is-primary is-fullheight">
@@ -47,29 +42,10 @@ class HomePage extends React.Component {
                                     alt="Logo"
                                 />
                                 {(!isNotificationOn && (
-                                    <QuestionContainer>
-                                        {(() => {
-                                            if (activeQuestion) {
-                                                switch (
-                                                    activeQuestion.fields
-                                                        .QuestionType
-                                                ) {
-                                                    case "RATING":
-                                                        return (
-                                                            <Rating
-                                                                showNotification={
-                                                                    this
-                                                                        .showNotification
-                                                                }
-                                                                {...activeQuestion}
-                                                            />
-                                                        );
-                                                    default:
-                                                        return null;
-                                                }
-                                            }
-                                        })()}
-                                    </QuestionContainer>
+                                    <Question
+                                        question={question}
+                                        onSubmit={this.showNotification}
+                                    />
                                 )) || (
                                     <Notification
                                         onClose={this.hideNotification}

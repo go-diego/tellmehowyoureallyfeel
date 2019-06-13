@@ -16,12 +16,12 @@ export default function FreeText(props) {
         id
     } = props;
 
-    async function handleSubmit(event) {
+    async function handleSubmit() {
         const documents = {
             documents: [
                 {
                     language: "en",
-                    id: "1",
+                    id: "1", // TODO: generate random unique id
                     text: feedback
                 }
             ]
@@ -36,24 +36,21 @@ export default function FreeText(props) {
         const sentimentResponse = await sentimentResponsePromise;
         const keyPhrasesResponse = await keyPhrasesResponsePromise;
 
-        console.log("sentimentResponse", sentimentResponse);
-        console.log("keyPhrasesResponse", keyPhrasesResponse);
+        const fields = {
+            fields: {
+                QuestionID: id,
+                QuestionType,
+                Question,
+                Answer: feedback,
+                Sentiment: sentimentResponse.documents[0].score,
+                KeyPhrases: keyPhrasesResponse.documents[0].keyPhrases.join(
+                    ", "
+                )
+            }
+        };
 
-        // const fields = {
-        //     fields: {
-        //         QuestionID: id,
-        //         QuestionType,
-        //         Question,
-        //         Answer: feedback,
-        //         Sentiment:
-        //         KeyPhrases:
-        //     }
-        // };
-
-        // const response = await airtable.createSubmission(fields);
-        // console.log("response", response);
-
-        //onSubmit();
+        const response = await airtable.createSubmission(fields);
+        onSubmit();
     }
 
     function handleChange(event) {
@@ -70,8 +67,17 @@ export default function FreeText(props) {
                         placeholder="Tell us how you really feel"
                     />
                 </div>
-                <small>{`${(feedback && feedback.length) ||
-                    0}/${requiredWordCount}`}</small>
+                {feedback &&
+                    feedback.length &&
+                    feedback.length < requiredWordCount && (
+                        <small>{`${(feedback && feedback.length) ||
+                            0}/${requiredWordCount}`}</small>
+                    )}
+                {feedback &&
+                    feedback.length &&
+                    feedback.length >= requiredWordCount && (
+                        <small>{`${feedback.length} words`}</small>
+                    )}
             </div>
             <button
                 onClick={handleSubmit}

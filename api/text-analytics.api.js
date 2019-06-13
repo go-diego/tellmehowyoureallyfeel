@@ -5,7 +5,7 @@ export default function TextAnalytics() {
     const baseOptions = {
         headers: {
             "Content-Type": "application/json",
-            "Ocp-Apim-Subscription-Key": process.env.PAPAYA_KEY1
+            "Ocp-Apim-Subscription-Key": process.env.PAPAYA_KEY
         }
     };
 

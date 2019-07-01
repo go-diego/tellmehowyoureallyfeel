@@ -46,7 +46,7 @@ export default function FreeText(props) {
                 KeyPhrases: keyPhrasesResponse.documents[0].keyPhrases.join(
                     ", "
                 ),
-                CharacterCount: feedback.length
+                CharacterCount: feedback.length.trim()
             }
         };
 

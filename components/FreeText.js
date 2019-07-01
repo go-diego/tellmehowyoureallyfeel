@@ -45,11 +45,12 @@ export default function FreeText(props) {
                 Sentiment: sentimentResponse.documents[0].score,
                 KeyPhrases: keyPhrasesResponse.documents[0].keyPhrases.join(
                     ", "
-                )
+                ),
+                CharacterCount: feedback.length
             }
         };
 
-        const response = await airtable.createSubmission(fields);
+        await airtable.createSubmission(fields);
         onSubmit();
     }
 

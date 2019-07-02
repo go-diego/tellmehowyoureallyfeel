@@ -2,6 +2,7 @@ import React from "react";
 import styled from "styled-components";
 import Rating from "../components/Rating";
 import FreeText from "../components/FreeText";
+import Tags from "../components/Tags";
 import Loader from "../components/Loader";
 
 const QuestionContainer = styled.div`
@@ -44,6 +45,14 @@ export default function Question(props) {
                             case "FREE_TEXT":
                                 return (
                                     <FreeText
+                                        onSubmit={handleSubmit}
+                                        {...question}
+                                    />
+                                );
+                            case "MULTIPLE_CHOICE":
+                                return (
+                                    <Tags
+                                        onSubmitting={onSubmitting}
                                         onSubmit={handleSubmit}
                                         {...question}
                                     />

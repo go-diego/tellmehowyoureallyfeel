@@ -36,6 +36,6 @@
         "netlify-lambda": "^1.4.3",
         "next-images": "^1.0.1",
         "next-server": "^7.0.2-canary.34",
-        "node-sass": "^4.10.0"
+        "node-sass": "^7.0.0"
     }
 }

@@ -15,7 +15,7 @@
         "express": "^4.16.4",
         "isomorphic-unfetch": "^3.0.0",
         "ky": "^0.11.1",
-        "next": "^7.0.2",
+        "next": "^13.0.2",
         "next-compose-plugins": "^2.1.1",
         "next-ga": "^2.3.4",
         "node-fetch": "^2.3.0",
